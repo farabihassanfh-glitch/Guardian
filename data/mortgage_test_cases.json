@@ -1,0 +1,245 @@
+{
+  "_note": "Synthetic fixtures. Rebuilt from the original coursework data, which was internally inconsistent: its 'dti_ratio' field recorded debts EXCLUDING the proposed housing payment, while its expected_decision labels assumed that figure was a back-end ratio. Under a correct back-end calculation (policy 2.6) all three original cases exceeded the 50% ceiling, so all three would deny. Obligations here are set so the back-end ratio matches the intended narrative: strong / borderline / weak. Roll-ups, line items and stated ratios all agree.",
+  "test_cases": [
+    {
+      "case_id": "MTG-2025-001",
+      "name": "Sarah Johnson",
+      "ssn": "123-45-6789",
+      "email": "sarah.johnson@email.com",
+      "phone": "555-234-5678",
+      "address": "1234 Oak Street, San Francisco, CA 94102",
+      "credit_score": 760,
+      "credit_history": {
+        "bankruptcies": 0,
+        "foreclosures": 0,
+        "late_payments_12mo": 0,
+        "late_payments_24mo": 0,
+        "collections": [],
+        "inquiries_6mo": 2,
+        "oldest_tradeline_years": 15,
+        "total_tradelines": 12,
+        "credit_notes": "Excellent payment history. Multiple credit cards with perfect payment record. Auto loan paid as agreed. No derogatory items."
+      },
+      "employment": {
+        "employer": "Tech Solutions Inc",
+        "position": "Senior Software Engineer",
+        "years": 6.5,
+        "monthly_income": 12500,
+        "type": "W2",
+        "employment_gap": "None",
+        "gap_explanation": "N/A",
+        "employment_history": [
+          {"employer": "Tech Solutions Inc", "position": "Senior Software Engineer", "years": 6.5, "income": 150000},
+          {"employer": "Digital Systems Corp", "position": "Software Engineer", "years": 4.0, "income": 95000}
+        ],
+        "income_details": {
+          "base_salary": 150000,
+          "bonus_2023": 18000,
+          "bonus_2024": 22000,
+          "bonus_stable": true,
+          "employer_confirmation": "Bonus likely to continue per employer letter dated 2025-01-15"
+        }
+      },
+      "debts": {
+        "car_loan": 650,
+        "student_loan": 350,
+        "credit_cards": 0,
+        "total_monthly_debt": 1000
+      },
+      "assets": {
+        "checking": 85000,
+        "savings": 100000,
+        "liquid_assets_total": 185000,
+        "401k": 250000,
+        "recent_deposits": [
+          {"date": "2024-12-15", "amount": 22000, "description": "Annual bonus"},
+          {"date": "2024-11-30", "amount": 12500, "description": "Regular salary"},
+          {"date": "2024-10-30", "amount": 12500, "description": "Regular salary"}
+        ],
+        "deposit_explanations": "December bonus of $22,000 documented with pay stub and employer letter. All other deposits are regular salary.",
+        "reserves_months": 18
+      },
+      "loan": {
+        "amount": 400000,
+        "down_payment": 100000,
+        "closing_costs": 12000,
+        "estimated_payment": 3200,
+        "property_type": "Single Family",
+        "use": "Primary Residence",
+        "monthly_piti": 3200
+      },
+      "property": {
+        "purchase_price": 500000,
+        "appraised_value": 515000,
+        "condition": "C3 - Average",
+        "type": "Single Family Home",
+        "required_repairs": 0,
+        "repair_details": "No repairs required"
+      },
+      "dti_ratio": 0.336,
+      "housing_ratio": 0.256,
+      "expected_decision": "APPROVED"
+    },
+    {
+      "case_id": "MTG-2025-002",
+      "name": "Michael Chen",
+      "ssn": "987-65-4321",
+      "email": "m.chen@techcorp.com",
+      "phone": "(415) 555-9876",
+      "address": "567 Maple Avenue, Oakland, CA 94601",
+      "credit_score": 680,
+      "credit_history": {
+        "bankruptcies": 0,
+        "foreclosures": 0,
+        "late_payments_12mo": 1,
+        "late_payments_24mo": 2,
+        "collections": [],
+        "inquiries_6mo": 5,
+        "oldest_tradeline_years": 8,
+        "total_tradelines": 9,
+        "credit_notes": "One 30-day late payment 10 months ago on a credit card (payment processing error, resolved). Another 30-day late 18 months ago during job transition. No major derogatory items."
+      },
+      "employment": {
+        "employer": "TechStart LLC",
+        "position": "Product Manager",
+        "years": 1.5,
+        "monthly_income": 9500,
+        "type": "W2",
+        "employment_gap": "Yes",
+        "gap_explanation": "3-month gap between jobs during industry transition from retail to tech. Documented with offer letter and start date confirmation.",
+        "employment_history": [
+          {"employer": "TechStart LLC", "position": "Product Manager", "years": 1.5, "income": 114000},
+          {"employer": "RetailCo", "position": "Store Manager", "years": 5.0, "income": 75000}
+        ],
+        "income_details": {
+          "base_salary": 114000,
+          "bonus_2023": 0,
+          "bonus_2024": 8000,
+          "bonus_stable": false,
+          "employer_confirmation": "First year bonus only, not guaranteed ongoing"
+        }
+      },
+      "debts": {
+        "car_loan": 650,
+        "student_loan": 450,
+        "credit_cards": 470,
+        "total_monthly_debt": 1570
+      },
+      "assets": {
+        "checking": 38000,
+        "savings": 30000,
+        "liquid_assets_total": 68000,
+        "401k": 45000,
+        "recent_deposits": [
+          {"date": "2024-12-20", "amount": 8000, "description": "Year-end bonus"},
+          {"date": "2024-11-15", "amount": 9500, "description": "Regular salary"}
+        ],
+        "deposit_explanations": "December bonus documented with pay stub.",
+        "reserves_months": 3
+      },
+      "loan": {
+        "amount": 350000,
+        "down_payment": 50000,
+        "closing_costs": 8000,
+        "estimated_payment": 2800,
+        "property_type": "Condo",
+        "use": "Primary Residence",
+        "monthly_piti": 2800
+      },
+      "property": {
+        "purchase_price": 400000,
+        "appraised_value": 398000,
+        "condition": "C3 - Average",
+        "type": "Condominium",
+        "required_repairs": 3500,
+        "repair_details": "Minor roof repairs needed, electrical panel update required"
+      },
+      "dti_ratio": 0.46,
+      "housing_ratio": 0.295,
+      "expected_decision": "CONDITIONAL"
+    },
+    {
+      "case_id": "MTG-2025-003",
+      "name": "Robert Martinez",
+      "ssn": "456-78-9012",
+      "email": "r.martinez@freelance.net",
+      "phone": "555-876-5432",
+      "address": "890 Pine Street, Berkeley, CA 94704",
+      "credit_score": 595,
+      "credit_history": {
+        "bankruptcies": 1,
+        "bankruptcy_chapter": 13,
+        "bankruptcy_years_since_discharge": 0.5,
+        "foreclosures": 0,
+        "late_payments_12mo": 3,
+        "late_payments_24mo": 7,
+        "collections": [
+          {"type": "medical", "amount": 1200},
+          {"type": "credit_card", "amount": 2300}
+        ],
+        "inquiries_6mo": 8,
+        "oldest_tradeline_years": 4,
+        "total_tradelines": 6,
+        "credit_notes": "Chapter 13 bankruptcy filed 2.5 years ago, discharged 6 months ago. Multiple recent late payments. Two collections totalling $3,500 (medical $1,200, credit card $2,300). High inquiry rate suggests credit-seeking behaviour."
+      },
+      "employment": {
+        "employer": "Self-Employed (Freelance Consulting)",
+        "position": "Consultant",
+        "years": 2.0,
+        "monthly_income": 7200,
+        "type": "Self-Employed",
+        "employment_gap": "Yes",
+        "gap_explanation": "Multiple gaps due to contract-based freelance work. Income varies significantly month to month.",
+        "employment_history": [
+          {"employer": "Self-Employed (Freelance Consulting)", "position": "Consultant", "years": 2.0, "income": 86400},
+          {"employer": "Various Contract Roles", "position": "Contractor", "years": 3.0, "income": 65000}
+        ],
+        "income_details": {
+          "base_salary": 0,
+          "bonus_2023": 0,
+          "bonus_2024": 0,
+          "bonus_stable": false,
+          "employer_confirmation": "Self-employed - income declining 25% year-over-year per tax returns"
+        }
+      },
+      "debts": {
+        "car_loan": 550,
+        "credit_cards": 850,
+        "personal_loan": 200,
+        "total_monthly_debt": 1600
+      },
+      "assets": {
+        "checking": 12000,
+        "savings": 10000,
+        "liquid_assets_total": 22000,
+        "401k": 0,
+        "recent_deposits": [
+          {"date": "2024-12-10", "amount": 15000, "description": "Large deposit - source unknown"},
+          {"date": "2024-11-05", "amount": 7200, "description": "Client payment"}
+        ],
+        "deposit_explanations": "Large $15,000 deposit not explained - requires sourcing documentation.",
+        "reserves_months": 0
+      },
+      "loan": {
+        "amount": 315000,
+        "down_payment": 35000,
+        "closing_costs": 6000,
+        "estimated_payment": 2400,
+        "property_type": "Single Family",
+        "use": "Primary Residence",
+        "monthly_piti": 2400
+      },
+      "property": {
+        "purchase_price": 350000,
+        "appraised_value": 340000,
+        "condition": "C4 - Fair",
+        "type": "Single Family Home",
+        "required_repairs": 8500,
+        "repair_details": "Foundation cracks requiring structural engineer review. Roof replacement needed. HVAC system non-functional."
+      },
+      "dti_ratio": 0.556,
+      "housing_ratio": 0.333,
+      "expected_decision": "REJECTED"
+    }
+  ]
+}
