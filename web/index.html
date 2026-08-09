@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>The Underwriting Floor — watch AI agents review a mortgage</title>
+<title>The Underwriting Floor, watch AI agents review a mortgage</title>
 <style>
   :root{
     --bg:#0d1117; --panel:#151b23; --panel2:#1b232e; --line:#2a3340;
@@ -23,9 +23,14 @@
   .top h1{font-size:1.45rem;font-weight:700;letter-spacing:-.02em;display:flex;align-items:center;gap:10px}
   .top p{color:#c3d0df;font-size:1rem;margin-top:9px}
   .top b{color:var(--ink)}
-  .toggle{background:none;border:1px solid var(--line);color:var(--muted);border-radius:6px;
-    padding:5px 11px;font:600 12px/1 inherit;cursor:pointer;margin-top:11px}
-  .toggle:hover{border-color:#3a4757;color:var(--ink)}
+  .nav{display:flex;gap:8px;flex-wrap:wrap;margin-top:13px}
+  .toggle{background:none;border:1px solid var(--line);color:var(--muted);border-radius:7px;
+    padding:7px 13px;font:600 12.5px/1 inherit;cursor:pointer;text-decoration:none;
+    display:inline-flex;align-items:center;gap:6px;transition:border-color .15s,color .15s,background .15s}
+  .toggle:hover{border-color:var(--accent);color:var(--ink);background:rgba(90,169,255,.08)}
+  .toggle.jump{border-color:#33415a;color:#c3d0df}
+  html{scroll-behavior:smooth}
+  .deep{scroll-margin-top:16px}
   .more{margin-top:14px;padding-top:14px;border-top:1px solid var(--line);
     display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:16px}
   .more h4{font-size:.86rem;font-weight:650;margin-bottom:4px}
@@ -99,12 +104,14 @@
   .desk[data-state="done"]{cursor:pointer}
   .desk[data-state="done"]:hover{transform:translateY(-3px)}
 
-  .bubble{position:absolute;bottom:calc(100% - 4px);left:50%;transform:translateX(-50%) scale(.85);
-    background:#f2f6fb;color:#12202f;font-size:.68rem;line-height:1.35;padding:6px 9px;border-radius:9px;
-    width:132px;opacity:0;transition:opacity .25s,transform .25s;pointer-events:none;z-index:5;
-    box-shadow:0 4px 14px rgba(0,0,0,.45)}
+  /* Kept narrower than the desk pitch (112px desk + 10px gap) so four bubbles
+     can be open at once during the fan-out without colliding. */
+  .bubble{position:absolute;bottom:calc(100% - 2px);left:50%;transform:translateX(-50%) scale(.85);
+    background:#f2f6fb;color:#12202f;font-size:.61rem;line-height:1.3;padding:5px 7px;border-radius:8px;
+    width:100px;opacity:0;transition:opacity .25s,transform .25s;pointer-events:none;z-index:5;
+    box-shadow:0 3px 10px rgba(0,0,0,.4)}
   .bubble::after{content:"";position:absolute;top:100%;left:50%;transform:translateX(-50%);
-    border:6px solid transparent;border-top-color:#f2f6fb}
+    border:5px solid transparent;border-top-color:#f2f6fb}
   .desk[data-state="active"] .bubble{opacity:1;transform:translateX(-50%) scale(1)}
 
   .status{text-align:center;margin-top:18px;padding:16px 12px 4px;border-top:1px solid var(--line)}
@@ -210,14 +217,19 @@
 
   <div class="top">
     <h1><span>🏦</span> The Underwriting Floor</h1>
-    <p>A mortgage application normally crosses several desks — one person checks credit, another income,
+    <p>A mortgage application normally crosses several desks. One person checks credit, another income,
       another the property itself. <b>This is that office, staffed by AI agents</b>, working against a
       14-page lending policy. Pick an applicant on the left, watch the file move desk to desk in the middle,
       and read what each specialist says on the right.</p>
-    <button class="toggle" id="moreBtn">How does it actually work? ▾</button>
+    <div class="nav">
+      <button class="toggle" id="moreBtn">How does it actually work? ▾</button>
+      <a class="toggle jump" href="#gates">🚦 Hard gates</a>
+      <a class="toggle jump" href="#arch">🏗️ Architecture choices</a>
+      <a class="toggle jump" href="https://github.com/farabihassanfh-glitch/Guardian" target="_blank" rel="noopener">⌥ Source</a>
+    </div>
     <div class="more hide" id="moreBox">
       <div><h4>🧮 The maths happens first</h4><p>Every ratio is calculated in ordinary code before any AI
-        runs. The agents judge what the numbers mean — they never do arithmetic.</p></div>
+        runs. The agents judge what the numbers mean; they never do arithmetic.</p></div>
       <div><h4>🔒 The file is redacted</h4><p>Name, SSN, phone and address are blacked out before anything
         is sent to a model. The agents see finances, not a person.</p></div>
       <div><h4>👥 Four desks work at once</h4><p>Credit, income, assets and property don't depend on each
@@ -258,7 +270,7 @@
             <div class="f2"><label>Years at job</label><input type="number" id="c_years_employed" value="5" min="0" max="60" step="0.5"></div>
           </div>
           <div class="f2"><label>Repairs needed ($)</label><input type="number" id="c_required_repairs" value="0" min="0" step="500"></div>
-          <div class="piti">Estimated payment <b id="piti">—</b></div>
+          <div class="piti">Estimated payment <b id="piti">,</b></div>
         </div>
       </div>
       <button class="run" id="run" disabled>▶ Start the review</button>
@@ -289,7 +301,7 @@
   </section>
 
   <section id="numsSec" class="hide">
-    <div class="step-label">The numbers <span style="text-transform:none;letter-spacing:0;color:var(--dim)">— worked out in code, before any AI ran</span></div>
+    <div class="step-label">The numbers <span style="text-transform:none;letter-spacing:0;color:var(--dim)">, worked out in code, before any AI ran</span></div>
     <div class="nums" id="nums"></div>
   </section>
 
@@ -299,11 +311,11 @@
     <details class="d"><summary>🧾 Audit trail</summary><div class="body trail" id="trail"></div></details>
   </section>
 
-  <section class="deep">
+  <section class="deep" id="gates">
     <div class="deep-head">
       <h2>🚦 Hard gates</h2>
       <p>Some rules are bright lines, not judgement calls. These are decided in <b>ordinary code, before any
-        model is consulted</b> — so they can't be talked around by a persuasive-sounding analysis, and they
+        model is consulted</b>, so they can't be talked around by a persuasive-sounding analysis, and they
         still hold if the AI is unavailable. A breach forces a denial regardless of what the model concluded.</p>
     </div>
     <div class="deep-grid">
@@ -319,7 +331,7 @@
     </div>
   </section>
 
-  <section class="deep">
+  <section class="deep" id="arch">
     <div class="deep-head">
       <h2>🏗️ Key architecture choices</h2>
       <p>Seven decisions that shaped this build, and what each one was avoiding.</p>
@@ -327,7 +339,7 @@
     <div class="deep-grid three">
       <div class="card why">
         <h4>Arithmetic in code, judgement in the model</h4>
-        <p>Every ratio is computed in Python and handed to the agent marked <code>PRE-CALCULATED —
+        <p>Every ratio is computed in Python and handed to the agent marked <code>PRE-CALCULATED ,
           AUTHORITATIVE</code>. Ask a language model to divide and it will sometimes say 30.4% and sometimes
           30.6%, with no way to tell which run was wrong. Ask whether 30.4% is comfortable for a borrower
           with an 18-month job history, and you're using it for what it's actually good at.</p>
@@ -336,7 +348,7 @@
         <h4>One shared file, not agents messaging each other</h4>
         <p>Four agents talking directly means twelve possible message routes and no record of who said what.
           Instead every agent reads and writes one shared record. In lending the audit trail isn't
-          paperwork — it's half the product — and this way it assembles itself as a by-product of the work.</p>
+          paperwork, it's half the product, and this way it assembles itself as a by-product of the work.</p>
       </div>
       <div class="card why">
         <h4>Parallel by default, which the merge rules had to earn</h4>
@@ -346,13 +358,13 @@
       </div>
       <div class="card why">
         <h4>A typed decision, not a parsed one</h4>
-        <p>The underwriter returns a validated schema — decision, risk score, conditions, memo. An earlier
+        <p>The underwriter returns a validated schema: decision, risk score, conditions, memo. An earlier
           version scraped the label out of prose, which read "the application was not denied" as a denial.
           Schema validation removes that failure mode rather than patching around it.</p>
       </div>
       <div class="card why">
         <h4>Redaction is an allowlist</h4>
-        <p>Only named fields reach the model. A blocklist removes only the identifiers you remembered — the
+        <p>Only named fields reach the model. A blocklist removes only the identifiers you remembered. The
           original forgot <code>email</code>, and the test fixture's email address was the applicant's own
           name. An allowlist fails closed: new fields are withheld until someone permits them.</p>
       </div>
@@ -365,7 +377,7 @@
       <div class="card why">
         <h4>Runs on one API key</h4>
         <p>Anthropic serves no embeddings endpoint, so searching the policy manual would normally require a
-          second vendor. Embeddings run locally instead — the index builds offline, retrieval makes no
+          second vendor. Embeddings run locally instead: the index builds offline, retrieval makes no
           network call, and the whole service needs a single credential.</p>
       </div>
     </div>
@@ -378,24 +390,31 @@
 const AGENTS=[
   {id:"initialize",p:"🧑‍💼",name:"Intake Clerk",   sub:"Redact & calculate",
    doing:"Blacking out the name and SSN, then calculating every ratio",
+   brief:"Redacting, running numbers",
    says:"File's in. Redacting personal details and running the numbers."},
   {id:"credit",    p:"🕵️",name:"Credit",         sub:"Score & history",
-   doing:"Reading the credit report — score, late payments, anything derogatory",
+   doing:"Reading the credit report, score, late payments, anything derogatory",
+   brief:"Reading the credit report",
    says:"Pulling the credit report."},
   {id:"income",    p:"🧑‍🏫",name:"Income",         sub:"Can they pay?",
    doing:"Working out whether they can actually afford this payment",
+   brief:"Can they afford it?",
    says:"Checking whether they can carry this payment."},
   {id:"asset",     p:"🧑‍🌾",name:"Assets",         sub:"Cash to close",
-   doing:"Counting the cash — enough to close, and enough left over after",
-   says:"Counting the cash — to close, and to spare."},
+   doing:"Counting the cash, enough to close, and enough left over after",
+   brief:"Counting the cash",
+   says:"Counting the cash, to close, and to spare."},
   {id:"collateral",p:"👷",name:"Property",        sub:"Value & condition",
    doing:"Valuing the house and checking what state it's in",
-   says:"Looking at the house — value and condition."},
+   brief:"Valuing the house",
+   says:"Looking at the house, value and condition."},
   {id:"critic",    p:"🧐",name:"Reviewer",        sub:"Cross-check",
-   doing:"Second pair of eyes — do the four reports contradict each other?",
+   doing:"Second pair of eyes, do the four reports contradict each other?",
+   brief:"Checking for contradictions",
    says:"Reading all four reports side by side."},
   {id:"decision",  p:"👩‍⚖️",name:"Underwriter",     sub:"Final call",
    doing:"Weighing it all up and writing the decision",
+   brief:"Making the call",
    says:"Weighing everything up now."},
 ];
 const BY_ID=Object.fromEntries(AGENTS.map(a=>[a.id,a]));
@@ -404,8 +423,8 @@ const FACES={"MTG-2025-001":"😀","MTG-2025-002":"🙂","MTG-2025-003":"😟"};
 
 const $=s=>document.querySelector(s);
 const el=(t,c,x)=>{const n=document.createElement(t);if(c)n.className=c;if(x!=null)n.textContent=x;return n;};
-const money=v=>v==null?"—":"$"+Number(v).toLocaleString(undefined,{maximumFractionDigits:0});
-const pct=v=>v==null?"—":Number(v).toFixed(1)+"%";
+const money=v=>v==null?",":"$"+Number(v).toLocaleString(undefined,{maximumFractionDigits:0});
+const pct=v=>v==null?",":Number(v).toFixed(1)+"%";
 const clip=(s,n)=>{s=(s||"").replace(/[#*`]/g,"").replace(/\s+/g," ").trim();
   return s.length>n?s.slice(0,n).replace(/\s\S*$/,"")+"…":s;};
 
@@ -420,7 +439,7 @@ $("#moreBtn").onclick=()=>{
 /* ───── build the office ───── */
 function deskHTML(a){
   return `<div class="desk" data-node="${a.id}" data-state="idle">
-    <div class="bubble">${a.doing}</div>
+    <div class="bubble">${a.brief}</div>
     <div class="folder">📁</div>
     <span class="mood">😴</span>
     <span class="person">${a.p}</span>
@@ -499,7 +518,7 @@ fetch("/api/gates").then(r=>r.json()).then(g=>{
   const b=$("#evalBox");
   b.appendChild(el("h4",null,"How it's tested"));
   const p=el("p"); p.innerHTML=`<b>${g.evals.test_count} test functions</b> and
-    <b>${g.evals.network_calls} network calls</b> — the whole agent graph runs against a stubbed model, so
+    <b>${g.evals.network_calls} network calls</b>, the whole agent graph runs against a stubbed model, so
     orchestration bugs stay separate from prompt bugs and the suite costs nothing to run.`;
   b.appendChild(p);
   const u2=el("ul","list"); g.evals.covers.forEach(x=>u2.appendChild(el("li",null,x))); b.appendChild(u2);
@@ -547,10 +566,10 @@ function renderNums(m){
   $("#numsSec").classList.remove("hide");
   const band=(v,a,b)=>v==null?"":v<=a?"ok":v<=b?"warn":"bad";
   const items=[
-    ["Credit score",m.credit_score??"—",m.credit_score>=740?"ok":m.credit_score>=620?"warn":"bad"],
+    ["Credit score",m.credit_score??",",m.credit_score>=740?"ok":m.credit_score>=620?"warn":"bad"],
     ["Debt-to-income",pct(m.dti_ratio),band(m.dti_ratio,43,50)],
     ["Loan-to-value",pct(m.ltv_ratio),band(m.ltv_ratio,80,95)],
-    ["Reserves",m.reserve_months==null?"—":m.reserve_months.toFixed(1)+" mo",
+    ["Reserves",m.reserve_months==null?",":m.reserve_months.toFixed(1)+" mo",
       m.reserve_months==null?"":m.reserve_months>=2?"ok":"bad"],
   ];
   const box=$("#nums"); box.innerHTML="";
@@ -576,7 +595,7 @@ function renderVerdict(d){
       d.matches_expected?"matches expected":"differs from expected: "+d.expected));
   v.appendChild(h);
   if(d.policy_violations?.length){
-    const f=el("div","flag","Hard rule breaches — decided in code, not by the AI:");
+    const f=el("div","flag","Hard rule breaches, decided in code, not by the AI:");
     const u=el("ul","list"); d.policy_violations.forEach(x=>u.appendChild(el("li",null,x)));
     f.appendChild(u); v.appendChild(f);
   }
@@ -604,7 +623,7 @@ $("#run").onclick=async()=>{
   buildOffice();
   setDesk("initialize","active"); holdFolder(["initialize"]);
   setStatus(BY_ID.initialize.name,BY_ID.initialize.doing,true);
-  sys(custom?"New file opened — your applicant":`New file opened — ${selected.label}`);
+  sys(custom?"New file opened, your applicant":`New file opened, ${selected.label}`);
   chat(BY_ID.initialize.name,BY_ID.initialize.p,BY_ID.initialize.says,"hi");
 
   try{
@@ -646,7 +665,7 @@ function handle(ev,d){
       litArrow("fan");
       SPECIALISTS.forEach(n=>{setDesk(n,"active");});
       holdFolder(SPECIALISTS);
-      setStatus("Four desks at once","Credit, income, assets and property — all reviewing in parallel",true);
+      setStatus("Four desks at once","Credit, income, assets and property, all reviewing in parallel",true);
       sys("Copies to all four specialists");
       SPECIALISTS.forEach(n=>chat(BY_ID[n].name,BY_ID[n].p,BY_ID[n].says));
     }
@@ -661,7 +680,7 @@ function handle(ev,d){
       }else{
         litArrow("join"); setDesk("critic","active");
         setStatus(BY_ID.critic.name,BY_ID.critic.doing,true);
-        sys("All four reports in — over to the reviewer");
+        sys("All four reports in, over to the reviewer");
         chat(BY_ID.critic.name,BY_ID.critic.p,BY_ID.critic.says,"hi");
       }
     }
@@ -678,7 +697,7 @@ function handle(ev,d){
     setStatus("Decision",(d.decision||"").replace(/_/g," "),false,d.decision);
     const cls=d.decision==="APPROVED"?"ok":d.decision==="DENIED"?"warn":"";
     chat(BY_ID.decision.name,BY_ID.decision.p,
-      `${(d.decision||"").replace(/_/g," ")} — risk score ${d.risk_score} out of 100.`,cls);
+      `${(d.decision||"").replace(/_/g," ")}, risk score ${d.risk_score} out of 100.`,cls);
     if(d.human_review_required) sys("Escalated to a human underwriter","warn");
     sys(`Finished in ${d.elapsed}s`);
     renderVerdict(d); if(d.metrics) renderNums(d.metrics);
