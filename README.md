@@ -3,7 +3,9 @@
 A six-agent LangGraph workflow that underwrites a residential mortgage application against a
 14-page policy manual, and a live web UI that shows the file moving desk to desk as it happens.
 
-**[Live demo](#)** · **[Architecture](docs/architecture.md)**
+**[Live demo](https://web-production-2b29.up.railway.app/)** · **[Architecture](docs/architecture.md)**
+
+> Runs live on Claude Opus 5. Demo runs are rate limited to 5/hour per visitor.
 
 > Built on a Johns Hopkins Agentic AI course template, then rebuilt as a deployable service.
 > The interesting work was not wiring the agents — it was finding out that the original
