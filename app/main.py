@@ -21,6 +21,7 @@ from fastapi import FastAPI, HTTPException, Request
 from fastapi.responses import FileResponse, StreamingResponse
 from pydantic import BaseModel, Field
 
+from app.applications import CustomApplication, build_case, estimate_monthly_payment
 from app.config import get_settings
 from app.graph import build_graph, initial_state
 from app.policies.store import get_policy_store
@@ -195,12 +196,17 @@ async def _run(case: dict[str, Any], thread_id: str) -> AsyncIterator[str]:
         return
 
     decision = final.get("final_decision")
+    expected = case.get("expected_decision")
     yield _sse(
         "complete",
         {
             "decision": decision,
-            "matches_expected": FIXTURE_LABELS.get(decision) == case.get("expected_decision"),
-            "expected": case.get("expected_decision"),
+            # An invented applicant has no expected outcome, so there is nothing
+            # to match against — the UI hides the badge when this is null.
+            "matches_expected": (
+                None if expected is None else FIXTURE_LABELS.get(decision) == expected
+            ),
+            "expected": expected,
             "risk_score": final.get("risk_score"),
             "conditions": final.get("conditions", []),
             "credit_memo": final.get("decision_memo"),
@@ -229,6 +235,33 @@ async def run_case(case_id: str, request: Request, overrides: Overrides | None =
 
     return StreamingResponse(
         _run(case, thread_id),
+        media_type="text/event-stream",
+        headers={"Cache-Control": "no-cache", "X-Accel-Buffering": "no"},
+    )
+
+
+@app.post("/api/estimate-payment")
+async def estimate_payment(payload: CustomApplication) -> dict[str, Any]:
+    """Derived monthly PITI, so the form can show it before a run is spent."""
+    return {
+        "monthly_payment": estimate_monthly_payment(payload.loan_amount, payload.property_value),
+        "assumed_rate": "6.5% / 30yr + 1.5% escrow",
+    }
+
+
+@app.post("/api/run-custom")
+async def run_custom(payload: CustomApplication, request: Request):
+    """Run the workflow against an applicant the visitor invented."""
+    if _graph is None:
+        raise HTTPException(503, "Service not configured — check /api/health")
+
+    _check_quota(request.client.host if request.client else "unknown")
+
+    case_id = f"CUSTOM-{int(time.time() * 1000)}"
+    case = build_case(payload, case_id)
+
+    return StreamingResponse(
+        _run(case, case_id),
         media_type="text/event-stream",
         headers={"Cache-Control": "no-cache", "X-Accel-Buffering": "no"},
     )
