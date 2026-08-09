@@ -89,8 +89,18 @@ carry `operator.add` reducers; with overwrite semantics three of four concurrent
 be lost. [`test_graph.py`](tests/test_graph.py) asserts the annotations so nobody removes one
 by accident. A `sequential` topology is retained for tracing.
 
-**Provider-agnostic.** `LLM_PROVIDER=openai|anthropic` switches the chat model without touching
-agent code. Embeddings stay on OpenAI — Anthropic doesn't serve them.
+**Runs on one Anthropic key — including retrieval.** `LLM_PROVIDER=anthropic|openai` switches the
+chat model without touching agent code. The harder half was embeddings: Anthropic serves no
+embeddings endpoint, so a Claude-only deployment would normally still need an OpenAI key just to
+index a 14-page PDF. Instead the default runs a quantised ONNX model in-process
+(`BAAI/bge-small-en-v1.5`, 384-dim) — no second vendor, no per-query network call, and the index
+builds offline. Hosted embeddings remain one env var away for anyone who wants them.
+
+**`temperature` is not how you get determinism on Claude.** Claude Opus 5 *rejects* sampling
+parameters — `temperature` returns a 400 rather than being ignored, so the usual `temperature=0`
+reflex breaks the first request. Reproducibility comes from prompt design and a settled numeric
+layer; `LLM_EFFORT` (`low`…`max`) replaces it as the cost/latency dial. The OpenAI path still sets
+`temperature=0`, and [`llm.py`](app/llm.py) is the only file that knows the difference.
 
 ## Running it
 
@@ -99,9 +109,11 @@ git clone https://github.com/<you>/mortgage-underwriting-agents
 cd mortgage-underwriting-agents
 python -m venv .venv && source .venv/bin/activate   # Windows: .venv\Scripts\activate
 pip install -r requirements.txt
-cp .env.example .env                                 # add your OPENAI_API_KEY
+cp .env.example .env                                 # add your ANTHROPIC_API_KEY
 uvicorn app.main:app --reload
 ```
+
+One key, nothing else. First boot downloads the ~130 MB embedding model once and caches it.
 
 Open http://localhost:8000.
 
@@ -119,11 +131,12 @@ misbehaves you want to know which of the two it was before you start reading pro
 
 1. Push to GitHub.
 2. Railway → **New Project** → **Deploy from GitHub repo**.
-3. Add variables: `OPENAI_API_KEY`, and optionally `RATE_LIMIT_PER_HOUR`, `DAILY_RUN_CAP`.
+3. Add one variable: `ANTHROPIC_API_KEY`. Optionally `LLM_EFFORT`, `RATE_LIMIT_PER_HOUR`, `DAILY_RUN_CAP`.
 4. `railway.json` supplies the start command and points the health check at `/api/health`.
 
-The policy index is built once at container start (~30s, ~45 embedding calls), not per request.
-Expect a slow first boot and fast requests after.
+The policy index is built once at container start, not per request — embeddings run locally, so
+that step costs nothing and needs no network. Expect a slow first boot (model download + index)
+and fast requests after.
 
 **A public demo spends real money.** One run is roughly six model calls. `RATE_LIMIT_PER_HOUR`
 (default 5, per IP) and `DAILY_RUN_CAP` (default 200) bound it. Set a hard spend limit in your

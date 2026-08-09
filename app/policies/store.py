@@ -1,8 +1,7 @@
 """Policy retrieval (RAG) over the underwriting manual.
 
 Built once at process start, held in memory. Rebuilding per request would
-re-embed the whole manual on every visit -- roughly 45 embedding calls and 30
-seconds of latency for a document that has not changed.
+re-embed the whole manual on every visit.
 """
 
 from __future__ import annotations
@@ -11,6 +10,8 @@ import logging
 import re
 import threading
 from typing import Any
+
+from langchain_core.documents import Document
 
 from app.config import get_settings
 from app.llm import get_embeddings
@@ -25,16 +26,32 @@ _lock = threading.Lock()
 _SECTION_RE = re.compile(r"^(\d+\.\d+\s+[A-Z][A-Za-z ,&-]+)")
 
 
+def load_policy_pages() -> list[Document]:
+    """Read the policy PDF into one Document per page.
+
+    Uses ``pypdf`` directly rather than a loader wrapper — it's four lines, and
+    it keeps the dependency surface to packages that are actively maintained.
+    """
+    from pypdf import PdfReader
+
+    path = get_settings().policy_pdf
+    reader = PdfReader(str(path))
+    pages = [
+        Document(page_content=text, metadata={"source": path.name, "page": i})
+        for i, page in enumerate(reader.pages, start=1)
+        if (text := (page.extract_text() or "").strip())
+    ]
+    log.info("Loaded %d pages of policy from %s", len(pages), path.name)
+    return pages
+
+
 def build_policy_store() -> Any:
     """Load the policy PDF, chunk it, embed it and return a vector store."""
     from langchain_chroma import Chroma
-    from langchain_community.document_loaders import PyPDFLoader
     from langchain_text_splitters import RecursiveCharacterTextSplitter
 
     s = get_settings()
-    log.info("Loading policy manual from %s", s.policy_pdf)
-
-    documents = PyPDFLoader(str(s.policy_pdf)).load()
+    documents = load_policy_pages()
 
     splitter = RecursiveCharacterTextSplitter(
         chunk_size=s.chunk_size,

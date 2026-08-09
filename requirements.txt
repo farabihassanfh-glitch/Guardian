@@ -4,13 +4,19 @@ pydantic==2.10.4
 
 langgraph==0.2.60
 langchain-core==0.3.29
-langchain-openai==0.2.14
 langchain-anthropic==0.3.1
-langchain-community==0.3.14
 langchain-text-splitters==0.3.5
 langchain-chroma==0.2.0
 chromadb==0.5.23
 pypdf==5.1.0
+
+# Local ONNX embeddings — no API key, no second vendor.
+# Anthropic serves no embeddings endpoint, so this is what lets the whole
+# service run on a single ANTHROPIC_API_KEY.
+fastembed==0.5.1
+
+# Optional: only needed for EMBEDDING_PROVIDER=openai or LLM_PROVIDER=openai
+langchain-openai==0.2.14
 
 pytest==8.3.4
 httpx==0.28.1

@@ -1,7 +1,8 @@
 """Runtime configuration, read once from the environment.
 
-Provider-agnostic: the workflow runs on OpenAI or Anthropic depending on
-``LLM_PROVIDER``. Nothing in the agent code knows which is in use.
+Provider-agnostic by design. The default deployment runs entirely on a single
+Anthropic API key: Claude for the agents, local ONNX embeddings for retrieval.
+OpenAI remains supported for anyone who has a key for it.
 """
 
 from __future__ import annotations
@@ -24,21 +25,35 @@ def _int(name: str, default: int) -> int:
 
 @dataclass(frozen=True)
 class Settings:
-    # --- Model ------------------------------------------------------------
-    provider: str = field(default_factory=lambda: os.environ.get("LLM_PROVIDER", "openai").lower())
-    model: str = field(default_factory=lambda: os.environ.get("LLM_MODEL", ""))
-    #: 0 for reproducibility. Two identical applications must decide identically
-    #: -- for lending that is a legal requirement, not a preference.
-    temperature: float = 0.0
-
-    openai_api_key: str = field(default_factory=lambda: os.environ.get("OPENAI_API_KEY", "").strip())
-    #: Optional proxy base (the JHU course routes OpenAI through its own gateway).
-    openai_base_url: str = field(default_factory=lambda: os.environ.get("OPENAI_BASE_URL", "").strip())
-    anthropic_api_key: str = field(default_factory=lambda: os.environ.get("ANTHROPIC_API_KEY", "").strip())
-
-    embedding_model: str = field(
-        default_factory=lambda: os.environ.get("EMBEDDING_MODEL", "text-embedding-3-small")
+    # --- Chat model -------------------------------------------------------
+    provider: str = field(
+        default_factory=lambda: os.environ.get("LLM_PROVIDER", "anthropic").lower()
     )
+    model: str = field(default_factory=lambda: os.environ.get("LLM_MODEL", "").strip())
+
+    #: Reasoning depth. Claude only; ignored on OpenAI.
+    #: low | medium | high | xhigh | max
+    effort: str = field(default_factory=lambda: os.environ.get("LLM_EFFORT", "medium").lower())
+
+    anthropic_api_key: str = field(
+        default_factory=lambda: os.environ.get("ANTHROPIC_API_KEY", "").strip()
+    )
+    openai_api_key: str = field(
+        default_factory=lambda: os.environ.get("OPENAI_API_KEY", "").strip()
+    )
+    #: Optional proxy base for OpenAI-compatible gateways.
+    openai_base_url: str = field(
+        default_factory=lambda: os.environ.get("OPENAI_BASE_URL", "").strip()
+    )
+
+    # --- Embeddings -------------------------------------------------------
+    #: "local" runs a small ONNX model in-process — no API key, no second
+    #: vendor. Anthropic serves no embeddings endpoint, so this is what makes
+    #: a Claude-only deployment possible.
+    embedding_provider: str = field(
+        default_factory=lambda: os.environ.get("EMBEDDING_PROVIDER", "local").lower()
+    )
+    embedding_model: str = field(default_factory=lambda: os.environ.get("EMBEDDING_MODEL", ""))
 
     # --- Retrieval --------------------------------------------------------
     chunk_size: int = field(default_factory=lambda: _int("CHUNK_SIZE", 1000))
@@ -58,19 +73,33 @@ class Settings:
     def resolved_model(self) -> str:
         if self.model:
             return self.model
-        return "claude-sonnet-4-5" if self.provider == "anthropic" else "gpt-4o-mini"
+        return "gpt-4o-mini" if self.provider == "openai" else "claude-opus-5"
+
+    @property
+    def resolved_embedding_model(self) -> str:
+        if self.embedding_model:
+            return self.embedding_model
+        if self.embedding_provider == "openai":
+            return "text-embedding-3-small"
+        # 384-dim, ~130MB ONNX. Downloaded once and cached on first use.
+        return "BAAI/bge-small-en-v1.5"
 
     def validate(self) -> list[str]:
         """Return a list of configuration problems, empty when healthy."""
         problems: list[str] = []
+
         if self.provider == "anthropic":
             if not self.anthropic_api_key:
                 problems.append("ANTHROPIC_API_KEY is not set")
-            # Embeddings always go through OpenAI; Anthropic serves chat only.
+        elif self.provider == "openai":
             if not self.openai_api_key:
-                problems.append("OPENAI_API_KEY is required for embeddings even on Anthropic")
-        elif not self.openai_api_key:
-            problems.append("OPENAI_API_KEY is not set")
+                problems.append("OPENAI_API_KEY is not set")
+        else:
+            problems.append(f"LLM_PROVIDER must be 'anthropic' or 'openai', got '{self.provider}'")
+
+        if self.embedding_provider == "openai" and not self.openai_api_key:
+            problems.append("EMBEDDING_PROVIDER=openai requires OPENAI_API_KEY")
+
         if not self.policy_pdf.exists():
             problems.append(f"policy PDF missing at {self.policy_pdf}")
         if not self.test_cases.exists():
