@@ -16,7 +16,7 @@ from typing import Any
 
 from langchain_core.messages import HumanMessage, SystemMessage
 
-from app.llm import get_llm
+from app.llm import get_llm, response_text
 from app.state import UnderwritingState
 
 SYSTEM = """You are a Quality Assurance reviewer in a mortgage underwriting shop.
@@ -73,6 +73,6 @@ def critic_node(state: UnderwritingState) -> dict[str, Any]:
     )
 
     return {
-        "critic_review": response.content,
+        "critic_review": response_text(response),
         "reasoning_chain": ["Critic: cross-checked all specialist analyses"],
     }

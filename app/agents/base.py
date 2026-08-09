@@ -16,7 +16,7 @@ from typing import Any, Callable
 from langchain_core.messages import HumanMessage, SystemMessage
 
 from app.compliance import detect_bias_signals
-from app.llm import get_llm
+from app.llm import get_llm, response_text
 from app.policies.store import retrieve_policies
 from app.state import UnderwritingState
 
@@ -112,7 +112,9 @@ def run_specialist(spec: SpecialistSpec, state: UnderwritingState) -> dict[str, 
     response = get_llm().invoke(
         [SystemMessage(content=system), HumanMessage(content=user)]
     )
-    analysis = response.content
+    # Not `response.content` — on Claude that is a list of blocks, and the bias
+    # scanner would fail on it with "'list' object has no attribute 'lower'".
+    analysis = response_text(response)
 
     return {
         spec.state_key: analysis,

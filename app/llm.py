@@ -29,6 +29,35 @@ from app.config import get_settings
 log = logging.getLogger(__name__)
 
 
+def response_text(response: Any) -> str:
+    """Flatten a chat response to plain text.
+
+    Providers disagree about the shape here, and the difference is silent until
+    something downstream calls a string method. OpenAI returns ``content`` as a
+    ``str``. Anthropic returns a **list of content blocks** whenever thinking is
+    on — which is the default on Claude Opus 5 — so ``content`` looks like
+    ``[{"type": "thinking", ...}, {"type": "text", "text": "..."}]``.
+
+    Thinking blocks are dropped deliberately: reasoning is not part of the
+    credit memo, and it should never reach the bias scanner or the audit trail.
+    """
+    content = getattr(response, "content", response)
+
+    if isinstance(content, str):
+        return content
+
+    if isinstance(content, list):
+        parts: list[str] = []
+        for block in content:
+            if isinstance(block, str):
+                parts.append(block)
+            elif isinstance(block, dict) and block.get("type") == "text":
+                parts.append(block.get("text", ""))
+        return "\n".join(p for p in parts if p).strip()
+
+    return str(content)
+
+
 @lru_cache(maxsize=1)
 def get_llm() -> Any:
     """Return the configured chat model."""

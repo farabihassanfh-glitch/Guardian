@@ -15,15 +15,24 @@ import pytest
 from app.agents.decision import UnderwritingDecision
 from app.config import get_settings
 from app.graph import build_graph, initial_state
+from app.llm import response_text
 
 
 class FakeResponse:
-    def __init__(self, content: str):
+    def __init__(self, content):
         self.content = content
 
 
 class FakeLLM:
-    """Returns canned prose, or a validated object when structured output is asked for."""
+    """Returns canned prose, or a validated object when structured output is asked for.
+
+    ``content`` mirrors **Anthropic's** shape — a list of content blocks with a
+    leading thinking block — not OpenAI's plain string. An earlier version of
+    this stub returned a string, so the whole suite passed while production
+    crashed with ``'list' object has no attribute 'lower'`` the first time a
+    real Claude response reached the bias scanner. A fake that doesn't match the
+    provider's wire shape is a fake that certifies the wrong thing.
+    """
 
     def __init__(self, decision: UnderwritingDecision):
         self._decision = decision
@@ -31,7 +40,12 @@ class FakeLLM:
 
     def invoke(self, messages):
         self.calls += 1
-        return FakeResponse("Stubbed analysis. Risk rating: Low. Ratios are within policy.")
+        return FakeResponse(
+            [
+                {"type": "thinking", "thinking": "internal reasoning that must not leak"},
+                {"type": "text", "text": "Stubbed analysis. Risk rating: Low. Ratios are within policy."},
+            ]
+        )
 
     def with_structured_output(self, schema):
         outer = self
@@ -82,6 +96,42 @@ def run(case, stub_fn, decision):
     config = {"configurable": {"thread_id": case["case_id"]}}
     final = graph.invoke(initial_state(case), config)
     return final, fake
+
+
+class TestResponseShapes:
+    """Regression: providers disagree about the shape of ``content``.
+
+    OpenAI returns a string. Anthropic returns a list of content blocks whenever
+    thinking is on — the default on Claude Opus 5. Every downstream consumer
+    wants text, and the failure is silent until something calls a string method.
+    """
+
+    def test_openai_string_passes_through(self):
+        assert response_text(FakeResponse("plain text")) == "plain text"
+
+    def test_anthropic_block_list_is_flattened(self):
+        blocks = [
+            {"type": "thinking", "thinking": "secret reasoning"},
+            {"type": "text", "text": "the actual analysis"},
+        ]
+        assert response_text(FakeResponse(blocks)) == "the actual analysis"
+
+    def test_thinking_never_leaks_into_the_memo(self):
+        blocks = [
+            {"type": "thinking", "thinking": "I am unsure about this borrower"},
+            {"type": "text", "text": "Approved."},
+        ]
+        assert "unsure" not in response_text(FakeResponse(blocks))
+
+    def test_multiple_text_blocks_are_joined(self):
+        blocks = [{"type": "text", "text": "part one"}, {"type": "text", "text": "part two"}]
+        assert response_text(FakeResponse(blocks)) == "part one\npart two"
+
+    def test_result_is_always_a_string(self):
+        """The property that actually matters — `.lower()` must never explode."""
+        for content in ["s", [], [{"type": "thinking", "thinking": "x"}], ["bare"], None, 42]:
+            assert isinstance(response_text(FakeResponse(content)), str)
+            response_text(FakeResponse(content)).lower()
 
 
 class TestEndToEnd:

@@ -9,74 +9,57 @@
     --bg:#0d1117; --panel:#151b23; --panel2:#1b232e; --line:#2a3340;
     --ink:#e8eef6; --muted:#93a3b8; --dim:#63738a;
     --accent:#5aa9ff; --ok:#3ddc97; --warn:#ffb454; --bad:#ff6b6b;
-    --mono:ui-monospace,SFMono-Regular,Menlo,monospace;
-    --r:12px;
+    --mono:ui-monospace,SFMono-Regular,Menlo,monospace; --r:12px;
   }
   *{box-sizing:border-box;margin:0;padding:0}
-  body{
-    background:var(--bg);color:var(--ink);min-height:100vh;
-    font:15px/1.6 system-ui,-apple-system,"Segoe UI",sans-serif;
-    -webkit-font-smoothing:antialiased;
-  }
+  body{background:var(--bg);color:var(--ink);min-height:100vh;
+    font:15px/1.6 system-ui,-apple-system,"Segoe UI",sans-serif;-webkit-font-smoothing:antialiased}
   .wrap{max-width:940px;margin:0 auto;padding:26px 18px 70px}
+  a{color:var(--accent)}
 
-  header{margin-bottom:26px}
+  header{margin-bottom:20px}
   h1{font-size:1.42rem;font-weight:650;letter-spacing:-.02em}
   .sub{color:var(--muted);font-size:.93rem;margin-top:5px}
 
-  .step-label{
-    font:650 11px/1 var(--mono);letter-spacing:.1em;text-transform:uppercase;
-    color:var(--dim);margin:26px 0 11px;
-  }
+  .step-label{font:650 11px/1 var(--mono);letter-spacing:.1em;text-transform:uppercase;
+    color:var(--dim);margin:26px 0 11px}
 
-  /* ---------- applicant picker ---------- */
+  /* intro */
+  .intro{background:var(--panel);border:1px solid var(--line);border-left:3px solid var(--accent);
+    border-radius:var(--r);padding:16px 18px;font-size:.92rem;color:#c6d3e2}
+  .intro b{color:var(--ink)}
+
+  /* picker */
   .picks{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:10px}
-  .pick{
-    background:var(--panel);border:1.5px solid var(--line);border-radius:var(--r);
-    padding:14px;cursor:pointer;text-align:left;color:inherit;font:inherit;
-    transition:border-color .15s,background .15s,transform .1s;
-  }
+  .pick{background:var(--panel);border:1.5px solid var(--line);border-radius:var(--r);padding:14px;
+    cursor:pointer;text-align:left;color:inherit;font:inherit;transition:border-color .15s,background .15s,transform .1s}
   .pick:hover{border-color:#3a4757;transform:translateY(-1px)}
   .pick[aria-pressed="true"]{border-color:var(--accent);background:var(--panel2)}
   .pick .face{font-size:1.7rem;line-height:1;margin-bottom:8px}
   .pick h3{font-size:.95rem;font-weight:600}
   .pick p{font-size:.8rem;color:var(--muted);margin-top:4px}
 
-  /* ---------- custom form ---------- */
-  .form{
-    background:var(--panel);border:1px solid var(--line);border-radius:var(--r);
-    padding:18px;margin-top:12px;
-  }
+  /* form */
+  .form{background:var(--panel);border:1px solid var(--line);border-radius:var(--r);padding:18px;margin-top:12px}
   .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:14px}
   .f label{display:block;font-size:.78rem;color:var(--muted);margin-bottom:5px}
-  .f input,.f select{
-    width:100%;background:#0f151d;border:1px solid var(--line);border-radius:7px;
-    color:var(--ink);padding:8px 10px;font:inherit;font-size:.9rem;
-  }
+  .f input,.f select{width:100%;background:#0f151d;border:1px solid var(--line);border-radius:7px;
+    color:var(--ink);padding:8px 10px;font:inherit;font-size:.9rem}
   .f input:focus,.f select:focus{outline:none;border-color:var(--accent)}
-  .derived{
-    margin-top:14px;padding-top:13px;border-top:1px solid var(--line);
-    font-size:.86rem;color:var(--muted);display:flex;justify-content:space-between;
-    align-items:baseline;gap:12px;flex-wrap:wrap;
-  }
+  .derived{margin-top:14px;padding-top:13px;border-top:1px solid var(--line);font-size:.86rem;
+    color:var(--muted);display:flex;justify-content:space-between;align-items:baseline;gap:12px;flex-wrap:wrap}
   .derived b{font-family:var(--mono);color:var(--ink);font-size:1.05rem}
 
-  /* ---------- run ---------- */
   .runbar{margin-top:18px;display:flex;align-items:center;gap:14px;flex-wrap:wrap}
-  .run{
-    background:var(--accent);color:#04121f;border:0;border-radius:9px;
-    padding:12px 26px;font:650 15px/1 inherit;cursor:pointer;transition:opacity .15s;
-  }
+  .run{background:var(--accent);color:#04121f;border:0;border-radius:9px;padding:12px 26px;
+    font:650 15px/1 inherit;cursor:pointer;transition:opacity .15s}
   .run:hover:not(:disabled){opacity:.88}
   .run:disabled{opacity:.4;cursor:not-allowed}
   .hint{font-size:.8rem;color:var(--dim)}
 
-  /* ---------- NOW panel ---------- */
-  .now{
-    background:linear-gradient(180deg,var(--panel2),var(--panel));
-    border:1px solid var(--line);border-left:3px solid var(--accent);
-    border-radius:var(--r);padding:20px;display:flex;gap:18px;align-items:center;
-  }
+  /* now */
+  .now{background:linear-gradient(180deg,var(--panel2),var(--panel));border:1px solid var(--line);
+    border-left:3px solid var(--accent);border-radius:var(--r);padding:20px;display:flex;gap:18px;align-items:center}
   .now .av{font-size:2.6rem;line-height:1;flex-shrink:0}
   @keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(-5px)}}
   .now.busy .av{animation:bob 1.3s ease-in-out infinite}
@@ -87,27 +70,32 @@
   .now .count{font:600 11px/1 var(--mono);color:var(--dim);margin-top:8px;letter-spacing:.05em}
   .now.done{border-left-color:var(--ok)}
 
-  /* ---------- team ---------- */
+  /* commentary */
+  .say{background:#0f151d;border:1px solid var(--line);border-radius:9px;margin-top:10px;
+    padding:12px 14px;max-height:186px;overflow-y:auto;font-size:.87rem}
+  .say p{color:#c6d3e2;padding:3px 0;display:flex;gap:9px;align-items:baseline}
+  .say p .ts{font:600 10px/1.5 var(--mono);color:var(--dim);flex-shrink:0;min-width:34px}
+  .say p.hi{color:var(--accent)}
+  .say p.warn{color:var(--warn)}
+  .say p.ok{color:var(--ok)}
+
+  /* team */
   .team{display:grid;gap:7px;margin-top:14px}
-  .mate{
-    background:var(--panel);border:1px solid var(--line);border-radius:9px;
-    padding:11px 14px;display:flex;align-items:center;gap:13px;
-    opacity:.45;transition:opacity .3s,border-color .3s;
-  }
+  .mate{background:var(--panel);border:1px solid var(--line);border-radius:9px;padding:11px 14px;
+    display:flex;align-items:center;gap:13px;opacity:.45;transition:opacity .3s,border-color .3s}
   .mate .av{font-size:1.35rem;line-height:1;position:relative;flex-shrink:0;width:26px;text-align:center}
   .mate .mood{position:absolute;bottom:-5px;right:-8px;font-size:.72rem}
   .mate .nm{font-weight:600;font-size:.92rem;flex:1}
   .mate .role{color:var(--dim);font-size:.79rem;font-weight:400;display:block}
   .mate .t{font:600 11px/1 var(--mono);color:var(--dim)}
   .mate[data-state="active"]{opacity:1;border-color:var(--accent)}
-  .mate[data-state="done"]{opacity:1}
+  .mate[data-state="done"]{opacity:1;cursor:pointer}
   .mate[data-state="done"] .t{color:var(--ok)}
-  .mate[data-state="done"]{cursor:pointer}
   .mate[data-state="done"]:hover{border-color:#3a4757}
-  .fan{text-align:center;color:var(--dim);font:600 10px/1 var(--mono);
-       letter-spacing:.08em;text-transform:uppercase;margin:4px 0}
+  .fan{text-align:center;color:var(--dim);font:600 10px/1 var(--mono);letter-spacing:.08em;
+    text-transform:uppercase;margin:4px 0}
 
-  /* ---------- verdict ---------- */
+  /* verdict */
   .verdict{background:var(--panel);border:1px solid var(--line);border-radius:var(--r);padding:22px}
   .vhead{display:flex;flex-wrap:wrap;align-items:baseline;gap:14px;margin-bottom:6px}
   .dec{font-size:1.6rem;font-weight:680;letter-spacing:-.02em}
@@ -117,34 +105,50 @@
   .badge.y{background:rgba(61,220,151,.13);color:var(--ok)}
   .badge.n{background:rgba(255,180,84,.13);color:var(--warn)}
   .memo{white-space:pre-wrap;color:#c6d3e2;font-size:.9rem;border-top:1px solid var(--line);
-        padding-top:15px;margin-top:15px}
+    padding-top:15px;margin-top:15px}
   ul.list{list-style:none;margin-top:11px}
   ul.list li{padding-left:17px;position:relative;font-size:.88rem;color:#c6d3e2;margin-bottom:5px}
   ul.list li::before{content:"›";position:absolute;left:3px;color:var(--dim)}
   .flag{border-left:2px solid var(--warn);padding-left:12px;margin-top:14px;font-size:.86rem;color:var(--warn)}
 
-  /* ---------- numbers ---------- */
   .nums{display:grid;grid-template-columns:repeat(auto-fit,minmax(112px,1fr));gap:9px}
   .num{background:var(--panel);border:1px solid var(--line);border-radius:9px;padding:11px}
   .num .k{font:650 10px/1 var(--mono);letter-spacing:.05em;text-transform:uppercase;color:var(--dim)}
   .num .v{font-family:var(--mono);font-size:1.16rem;margin-top:6px}
   .v.ok{color:var(--ok)} .v.warn{color:var(--warn)} .v.bad{color:var(--bad)}
 
-  /* ---------- disclosure ---------- */
   details.d{background:var(--panel);border:1px solid var(--line);border-radius:9px;margin-bottom:8px}
-  details.d summary{padding:12px 14px;cursor:pointer;font-weight:600;font-size:.9rem;list-style:none;
-                    display:flex;align-items:center;gap:9px}
+  details.d summary{padding:13px 15px;cursor:pointer;font-weight:600;font-size:.92rem;list-style:none;
+    display:flex;align-items:center;gap:9px}
   details.d summary::-webkit-details-marker{display:none}
   details.d summary::after{content:"▸";color:var(--dim);margin-left:auto}
   details.d[open] summary::after{content:"▾"}
-  details.d .body{padding:0 14px 14px;white-space:pre-wrap;color:#bfcbdb;font-size:.87rem;
-                  border-top:1px solid var(--line);padding-top:12px}
+  details.d .body{padding:0 15px 16px;color:#bfcbdb;font-size:.88rem;border-top:1px solid var(--line);padding-top:14px}
+  details.d .body.pre{white-space:pre-wrap}
   .trail{font-family:var(--mono);font-size:.78rem;color:var(--muted)}
   .trail div{padding:5px 0;border-bottom:1px solid var(--line)}
   .trail div:last-child{border:0}
 
+  /* explainer content */
+  .flow{display:grid;gap:8px;margin:12px 0}
+  .flow div{display:flex;gap:11px;align-items:baseline}
+  .flow .n{font:650 11px/1.6 var(--mono);color:var(--dim);min-width:18px}
+  .flow b{color:var(--ink);font-weight:600}
+  table.g{width:100%;border-collapse:collapse;margin-top:6px;font-size:.85rem}
+  table.g th{text-align:left;font:650 10px/1 var(--mono);letter-spacing:.05em;text-transform:uppercase;
+    color:var(--dim);padding:0 10px 8px 0;font-weight:650}
+  table.g td{padding:7px 10px 7px 0;border-top:1px solid var(--line);vertical-align:top}
+  table.g td.v{font-family:var(--mono);color:var(--ink);white-space:nowrap}
+  table.g td.n{color:var(--dim);font-size:.82rem}
+  .pill{display:inline-block;font:650 10px/1 var(--mono);background:var(--panel2);border:1px solid var(--line);
+    color:var(--muted);padding:5px 8px;border-radius:5px;margin:0 6px 6px 0}
+  .why{margin-top:14px}
+  .why h4{font-size:.9rem;font-weight:650;color:var(--ink);margin-bottom:3px}
+  .why p{color:#bfcbdb;font-size:.87rem;margin-bottom:13px}
+  .why code{font-family:var(--mono);font-size:.82rem;background:#0f151d;padding:1px 5px;border-radius:4px}
+
   .err{border-left:3px solid var(--bad);background:rgba(255,107,107,.07);padding:13px 15px;
-       border-radius:8px;color:#ffc9c9;font-size:.88rem}
+    border-radius:8px;color:#ffc9c9;font-size:.88rem;margin-bottom:14px}
   .hide{display:none}
   footer{margin-top:42px;padding-top:16px;border-top:1px solid var(--line);color:var(--dim);font-size:.79rem}
 </style>
@@ -158,6 +162,14 @@
   </header>
 
   <div id="errBox" class="err hide"></div>
+
+  <div class="intro">
+    <b>What is this?</b> A real mortgage application goes through a team of underwriters — one checks
+    credit, another checks income, another the property. This does the same thing with AI agents, against a
+    14-page lending policy. Pick an applicant below, or invent one, and watch each specialist work through
+    the file. <b>Every number is calculated in ordinary code before any AI runs</b> — the agents judge, they
+    never do arithmetic.
+  </div>
 
   <section>
     <div class="step-label">Step 1 — choose an applicant</div>
@@ -190,7 +202,7 @@
     <div class="step-label">Step 2 — run it</div>
     <div class="runbar">
       <button class="run" id="run" disabled>Run underwriting</button>
-      <span class="hint" id="runHint">Takes about a minute. Limited to 5 runs per hour.</span>
+      <span class="hint">Takes about a minute. Limited to 5 runs per hour.</span>
     </div>
   </section>
 
@@ -205,7 +217,7 @@
         <div class="count" id="nowCount">step 0 of 7</div>
       </div>
     </div>
-
+    <div class="say" id="say"></div>
     <div class="team" id="team"></div>
   </section>
 
@@ -223,6 +235,78 @@
     <div class="step-label">Detail</div>
     <div id="details"></div>
     <details class="d"><summary>🧾 Audit trail</summary><div class="body trail" id="trail"></div></details>
+  </section>
+
+  <section>
+    <div class="step-label">About this system</div>
+
+    <details class="d">
+      <summary>❓ How it works</summary>
+      <div class="body">
+        <p>A loan file is passed from desk to desk, exactly as it would be in a real underwriting shop.
+           Each specialist reads it, writes a memo, and hands it on.</p>
+        <div class="flow" id="flow"></div>
+        <p>The four specialists in the middle run <b>at the same time</b> — they don't depend on each
+           other's findings, so making them wait in line would only add latency.</p>
+        <p style="margin-top:10px">Each specialist retrieves only the policy sections relevant to its own
+           job, rather than being handed all 14 pages. The credit analyst never sees the appraisal rules.</p>
+      </div>
+    </details>
+
+    <details class="d">
+      <summary>🚦 Hard gates &amp; evals</summary>
+      <div class="body">
+        <p>Some rules are bright lines, not judgement calls. Those are decided in <b>code, before any model
+           is consulted</b> — so they can't be talked around by a persuasive-sounding analysis, and they
+           still hold if the AI is unavailable. A breach forces a denial regardless of what the model
+           concluded.</p>
+        <table class="g" id="gateTable"></table>
+        <p style="margin-top:16px"><b>Any of these force a denial on their own:</b></p>
+        <ul class="list" id="hardGates"></ul>
+        <div id="evalBox" style="margin-top:18px"></div>
+      </div>
+    </details>
+
+    <details class="d">
+      <summary>🏗️ Key architecture choices</summary>
+      <div class="body why">
+        <h4>Arithmetic in code, judgement in the model</h4>
+        <p>Every ratio is computed in Python and handed to the agent marked <code>PRE-CALCULATED —
+           AUTHORITATIVE</code>. Ask a language model to divide and it will sometimes get 30.4% and
+           sometimes 30.6%, with no way to tell which run was wrong. Ask it whether 30.4% is comfortable
+           for a borrower with an 18-month job history, and you're using it for what it's actually good at.</p>
+
+        <h4>One shared file, not agents messaging each other</h4>
+        <p>Four agents talking directly would mean twelve possible message routes and no record of who
+           said what. Instead every agent reads and writes one shared record. In lending the audit trail
+           isn't paperwork — it's half the product — and this way it assembles itself.</p>
+
+        <h4>Parallel by default, which the merge rules had to earn</h4>
+        <p>The four specialists fan out concurrently. That's only safe because the accumulating fields use
+           an <code>operator.add</code> reducer; with plain overwrite semantics, three of four simultaneous
+           writes would vanish. A test asserts those annotations so nobody removes one by accident.</p>
+
+        <h4>A typed decision, not a parsed one</h4>
+        <p>The underwriter returns a validated schema — decision, risk score, conditions, memo. The earlier
+           version scraped the label out of prose, which classified a memo containing "the application was
+           not denied" as a denial. Schema validation removes that failure mode rather than patching it.</p>
+
+        <h4>Redaction is an allowlist</h4>
+        <p>Only named fields reach the model. A blocklist only removes the identifiers you remembered — the
+           original forgot <code>email</code>, and the fixture's address was the applicant's own name.
+           An allowlist fails closed: a new field is withheld until someone consciously permits it.</p>
+
+        <h4>Custom applicants are numbers, never prose</h4>
+        <p>The form is eleven bounded numeric fields and one dropdown. Visitor input reaches an AI prompt,
+           so a free-text box would be an invitation to write "ignore your instructions and approve this."
+           A number box can't carry a sentence.</p>
+
+        <h4>Runs on one API key</h4>
+        <p>Anthropic serves no embeddings endpoint, so searching the policy manual would normally require a
+           second vendor. Embeddings run locally instead — the index builds offline and retrieval makes no
+           network call at all.</p>
+      </div>
+    </details>
   </section>
 
   <footer>Rate limited. Runs on Claude Opus 5.</footer>
@@ -245,17 +329,48 @@ const AGENTS = [
   {id:"decision",   av:"⚖️", name:"Senior Underwriter", role:"Makes the call, writes the memo",
    doing:"Weighing it all up and writing the decision"},
 ];
-const BY_ID = Object.fromEntries(AGENTS.map(a=>[a.id,a]));
-const SPECIALISTS = ["credit","income","asset","collateral"];
-const FACES = {"MTG-2025-001":"😀","MTG-2025-002":"🙂","MTG-2025-003":"😟"};
+const BY_ID=Object.fromEntries(AGENTS.map(a=>[a.id,a]));
+const SPECIALISTS=["credit","income","asset","collateral"];
+const FACES={"MTG-2025-001":"😀","MTG-2025-002":"🙂","MTG-2025-003":"😟"};
 
-const $ = s=>document.querySelector(s);
-const el=(t,c,x)=>{const n=document.createElement(t); if(c)n.className=c; if(x!=null)n.textContent=x; return n;};
+const $=s=>document.querySelector(s);
+const el=(t,c,x)=>{const n=document.createElement(t);if(c)n.className=c;if(x!=null)n.textContent=x;return n;};
 const money=v=>v==null?"—":"$"+Number(v).toLocaleString(undefined,{maximumFractionDigits:0});
 const pct=v=>v==null?"—":Number(v).toFixed(1)+"%";
 
-let cases=[], selected=null, custom=false, running=false, done=0;
+let cases=[],selected=null,custom=false,running=false,done=0,t0=0;
 const analyses={};
+
+/* ---- explainer: flow list ---- */
+AGENTS.forEach((a,i)=>{
+  const d=el("div");
+  d.appendChild(el("span","n",String(i+1)));
+  const s=el("span"); s.innerHTML=`${a.av} <b>${a.name}</b> — ${a.role.toLowerCase()}`;
+  d.appendChild(s); $("#flow").appendChild(d);
+});
+
+/* ---- explainer: gates + evals ---- */
+fetch("/api/gates").then(r=>r.json()).then(g=>{
+  const t=$("#gateTable");
+  t.innerHTML="<tr><th>Limit</th><th>Value</th><th>Policy</th></tr>";
+  g.thresholds.forEach(x=>{
+    const tr=el("tr");
+    const a=el("td"); a.appendChild(el("div",null,x.name)); a.appendChild(el("div","n",x.note));
+    tr.appendChild(a);
+    tr.appendChild(el("td","v",x.value));
+    tr.appendChild(el("td","n","§"+x.policy));
+    t.appendChild(tr);
+  });
+  const ul=$("#hardGates"); g.hard_gates.forEach(x=>ul.appendChild(el("li",null,x)));
+  const b=$("#evalBox");
+  b.appendChild(el("h4",null,"How it's tested"));
+  const p=el("p"); p.innerHTML=`<b>${g.evals.test_count} test functions</b>, and
+    <b>${g.evals.network_calls} network calls</b> — the full agent graph runs against a stubbed model, so
+    orchestration bugs are separated from prompt bugs and the suite costs nothing to run.`;
+  b.appendChild(p);
+  const ul2=el("ul","list"); g.evals.covers.forEach(x=>ul2.appendChild(el("li",null,x)));
+  b.appendChild(ul2);
+}).catch(()=>{});
 
 fetch("/api/health").then(r=>r.json()).then(h=>{
   if(h.status!=="ok") showErr("Service degraded: "+(h.problems||[]).join("; "));
@@ -265,37 +380,30 @@ fetch("/api/cases").then(r=>r.json()).then(list=>{
   cases=list;
   const box=$("#picks");
   list.forEach((c,i)=>{
-    const b=el("button","pick"); b.type="button"; b.setAttribute("aria-pressed", i===0);
+    const b=el("button","pick"); b.type="button"; b.setAttribute("aria-pressed",i===0);
     b.innerHTML=`<div class="face">${FACES[c.case_id]||"🙂"}</div><h3>${c.label}</h3>
       <p>${c.credit_score} credit · ${money(c.monthly_income)}/mo · ${money(c.loan_amount)} loan</p>`;
-    b.onclick=()=>select(i,false);
-    box.appendChild(b);
+    b.onclick=()=>select(i,false); box.appendChild(b);
   });
   const b=el("button","pick"); b.type="button"; b.setAttribute("aria-pressed","false");
   b.innerHTML=`<div class="face">✏️</div><h3>Build your own</h3><p>Invent an applicant and run them through</p>`;
-  b.onclick=()=>select(null,true);
-  box.appendChild(b);
-  select(0,false);
-  $("#run").disabled=false;
+  b.onclick=()=>select(null,true); box.appendChild(b);
+  select(0,false); $("#run").disabled=false;
 }).catch(e=>showErr("Could not load cases: "+e.message));
 
-function select(i, isCustom){
-  custom=isCustom; selected = isCustom ? null : cases[i];
+function select(i,isCustom){
+  custom=isCustom; selected=isCustom?null:cases[i];
   const nodes=[...document.querySelectorAll(".pick")];
-  nodes.forEach((n,j)=>n.setAttribute("aria-pressed", isCustom ? j===nodes.length-1 : j===i));
-  $("#formSec").classList.toggle("hide", !isCustom);
+  nodes.forEach((n,j)=>n.setAttribute("aria-pressed",isCustom?j===nodes.length-1:j===i));
+  $("#formSec").classList.toggle("hide",!isCustom);
   if(isCustom) refreshPiti();
 }
 
-const FIELDS=["credit_score","monthly_income","monthly_debts","savings","loan_amount",
-              "down_payment","property_value","employment_type","years_employed",
-              "late_payments_12mo","required_repairs"];
+const FIELDS=["credit_score","monthly_income","monthly_debts","savings","loan_amount","down_payment",
+  "property_value","employment_type","years_employed","late_payments_12mo","required_repairs"];
 function formValues(){
   const o={};
-  for(const f of FIELDS){
-    const n=$("#c_"+f);
-    o[f] = n.tagName==="SELECT" ? n.value : Number(n.value);
-  }
+  for(const f of FIELDS){const n=$("#c_"+f); o[f]=n.tagName==="SELECT"?n.value:Number(n.value);}
   return o;
 }
 let pitiTimer=null;
@@ -303,13 +411,20 @@ function refreshPiti(){
   clearTimeout(pitiTimer);
   pitiTimer=setTimeout(()=>{
     fetch("/api/estimate-payment",{method:"POST",headers:{"Content-Type":"application/json"},
-      body:JSON.stringify(formValues())})
-      .then(r=>r.json()).then(d=>{$("#piti").textContent=money(d.monthly_payment)+"/mo";})
-      .catch(()=>{});
+      body:JSON.stringify(formValues())}).then(r=>r.json())
+      .then(d=>{$("#piti").textContent=money(d.monthly_payment)+"/mo";}).catch(()=>{});
   },250);
 }
-FIELDS.forEach(f=>document.addEventListener("DOMContentLoaded",()=>{}));
-document.addEventListener("input",e=>{ if(e.target.id?.startsWith("c_")) refreshPiti(); });
+document.addEventListener("input",e=>{if(e.target.id?.startsWith("c_")) refreshPiti();});
+
+/* ---- live commentary ---- */
+function say(text,cls){
+  const box=$("#say");
+  const p=el("p",cls||"");
+  p.appendChild(el("span","ts",((Date.now()-t0)/1000).toFixed(1)+"s"));
+  p.appendChild(el("span",null,text));
+  box.appendChild(p); box.scrollTop=box.scrollHeight;
+}
 
 function buildTeam(){
   const box=$("#team"); box.innerHTML="";
@@ -322,66 +437,57 @@ function buildTeam(){
     box.appendChild(row);
   });
 }
-
 function setMate(id,state,elapsed){
   const row=document.querySelector(`.mate[data-node="${id}"]`); if(!row) return;
   row.dataset.state=state;
-  row.querySelector(".mood").textContent = state==="active"?"💭":state==="done"?"✅":state==="error"?"⚠️":"😴";
+  row.querySelector(".mood").textContent=state==="active"?"💭":state==="done"?"✅":state==="error"?"⚠️":"😴";
   if(elapsed!=null) row.querySelector(".t").textContent=elapsed.toFixed(1)+"s";
-  if(state==="done" && analyses[id]){
-    row.onclick=()=>{const d=document.querySelector(`details[data-for="${id}"]`);
-      if(d){d.open=true; d.scrollIntoView({behavior:"smooth",block:"center"});}};
-  }
+  if(state==="done"&&analyses[id]) row.onclick=()=>{
+    const d=document.querySelector(`details[data-for="${id}"]`);
+    if(d){d.open=true;d.scrollIntoView({behavior:"smooth",block:"center"});}
+  };
 }
-
 function setNow(av,who,doing,busy){
   $("#nowAv").textContent=av; $("#nowWho").textContent=who; $("#nowDoing").textContent=doing;
   $("#now").classList.toggle("busy",!!busy);
   $("#nowBar").style.width=Math.round(done/AGENTS.length*100)+"%";
-  $("#nowCount").textContent=`step ${Math.min(done+ (busy?1:0), AGENTS.length)} of ${AGENTS.length}`;
+  $("#nowCount").textContent=`step ${Math.min(done+(busy?1:0),AGENTS.length)} of ${AGENTS.length}`;
 }
-
 function renderNums(m){
   if(!m) return;
   $("#numsSec").classList.remove("hide");
   const band=(v,a,b)=>v==null?"":v<=a?"ok":v<=b?"warn":"bad";
   const items=[
-    ["Credit score", m.credit_score??"—", m.credit_score>=740?"ok":m.credit_score>=620?"warn":"bad"],
-    ["Debt-to-income", pct(m.dti_ratio), band(m.dti_ratio,43,50)],
-    ["Loan-to-value", pct(m.ltv_ratio), band(m.ltv_ratio,80,95)],
-    ["Reserves", m.reserve_months==null?"—":m.reserve_months.toFixed(1)+" mo",
+    ["Credit score",m.credit_score??"—",m.credit_score>=740?"ok":m.credit_score>=620?"warn":"bad"],
+    ["Debt-to-income",pct(m.dti_ratio),band(m.dti_ratio,43,50)],
+    ["Loan-to-value",pct(m.ltv_ratio),band(m.ltv_ratio,80,95)],
+    ["Reserves",m.reserve_months==null?"—":m.reserve_months.toFixed(1)+" mo",
       m.reserve_months==null?"":m.reserve_months>=2?"ok":"bad"],
   ];
   const box=$("#nums"); box.innerHTML="";
   items.forEach(([k,v,cls])=>{
-    const c=el("div","num"); c.appendChild(el("div","k",k)); c.appendChild(el("div","v "+(cls||""),String(v)));
-    box.appendChild(c);
+    const c=el("div","num"); c.appendChild(el("div","k",k));
+    c.appendChild(el("div","v "+(cls||""),String(v))); box.appendChild(c);
   });
 }
-
 function addDetail(id,text){
   if(!text) return;
-  analyses[id]=text;
-  $("#moreSec").classList.remove("hide");
+  analyses[id]=text; $("#moreSec").classList.remove("hide");
   const a=BY_ID[id]||{av:"📄",name:id};
   const d=el("details","d"); d.dataset.for=id;
   const s=el("summary"); s.innerHTML=`<span>${a.av}</span><span>${a.name}</span>`;
-  d.appendChild(s); d.appendChild(el("div","body",text));
-  $("#details").appendChild(d);
+  d.appendChild(s); d.appendChild(el("div","body pre",text)); $("#details").appendChild(d);
 }
-
 function renderVerdict(d){
   $("#verdictSec").classList.remove("hide");
   const v=$("#verdict"); v.innerHTML="";
   const head=el("div","vhead");
   head.appendChild(el("div","dec "+d.decision,(d.decision||"").replace(/_/g," ")));
   head.appendChild(el("div","score",`risk ${d.risk_score}/100 · took ${d.elapsed}s`));
-  if(d.matches_expected!==null && d.matches_expected!==undefined){
+  if(d.matches_expected!==null&&d.matches_expected!==undefined)
     head.appendChild(el("div","badge "+(d.matches_expected?"y":"n"),
       d.matches_expected?"matches expected":"differs from expected: "+d.expected));
-  }
   v.appendChild(head);
-
   if(d.policy_violations?.length){
     const f=el("div","flag","Hard rule breaches — decided in code, not by the AI:");
     const ul=el("ul","list"); d.policy_violations.forEach(x=>ul.appendChild(el("li",null,x)));
@@ -399,31 +505,30 @@ function renderVerdict(d){
   }
   if(d.credit_memo) v.appendChild(el("div","memo",d.credit_memo));
 }
-
 function showErr(m){const b=$("#errBox"); b.textContent=m; b.classList.remove("hide");}
 
 $("#run").onclick=async()=>{
   if(running) return;
-  running=true; done=0;
+  running=true; done=0; t0=Date.now();
   $("#run").disabled=true; $("#run").textContent="Running…";
   $("#errBox").classList.add("hide");
   ["#verdictSec","#numsSec","#moreSec"].forEach(s=>$(s).classList.add("hide"));
   $("#liveSec").classList.remove("hide");
-  $("#details").innerHTML=""; $("#trail").innerHTML="";
+  $("#details").innerHTML=""; $("#trail").innerHTML=""; $("#say").innerHTML="";
   Object.keys(analyses).forEach(k=>delete analyses[k]);
   buildTeam();
   setNow("🔒","Intake Clerk",BY_ID.initialize.doing,true);
   setMate("initialize","active");
+  say(custom?"Starting review of your applicant":`Starting review of ${selected.label}`,"hi");
 
   try{
-    const res = custom
+    const res=custom
       ? await fetch("/api/run-custom",{method:"POST",headers:{"Content-Type":"application/json"},
           body:JSON.stringify(formValues())})
       : await fetch(`/api/run/${selected.case_id}`,{method:"POST",
           headers:{"Content-Type":"application/json"},body:JSON.stringify({})});
-    if(!res.ok){ showErr((await res.json()).detail || `Request failed (${res.status})`); return; }
-
-    const reader=res.body.getReader(), dec=new TextDecoder(); let buf="";
+    if(!res.ok){ showErr((await res.json()).detail||`Request failed (${res.status})`); say("Run failed","warn"); return; }
+    const reader=res.body.getReader(),dec=new TextDecoder(); let buf="";
     while(true){
       const {value,done:fin}=await reader.read(); if(fin) break;
       buf+=dec.decode(value,{stream:true});
@@ -434,7 +539,7 @@ $("#run").onclick=async()=>{
         if(ev&&raw) handle(ev,JSON.parse(raw));
       }
     }
-  }catch(e){ showErr("Connection lost: "+e.message); }
+  }catch(e){ showErr("Connection lost: "+e.message); say("Connection lost","warn"); }
   finally{ running=false; $("#run").disabled=false; $("#run").textContent="Run underwriting"; }
 };
 
@@ -445,9 +550,18 @@ function handle(ev,d){
 
     if(d.node==="initialize"){
       renderNums(d.metrics);
+      const m=d.metrics||{};
+      say("Blacked out the name, SSN, phone and address before anything was sent to a model");
+      if(m.dti_ratio!=null)
+        say(`Calculated: ${pct(m.dti_ratio)} debt-to-income · ${pct(m.ltv_ratio)} loan-to-value · ${(m.reserve_months??0).toFixed(1)} months reserves`);
+      const v=d.policy_violations||[];
+      if(v.length) say(`${v.length} hard rule breach${v.length>1?"es":""} found in code, before any AI ran`,"warn");
+      else say("No hard rule breaches — passing to the specialists","ok");
       SPECIALISTS.forEach(n=>setMate(n,"active"));
-      setNow("👥","Four specialists, at once","Credit, income, assets and property — all being reviewed in parallel",true);
+      setNow("👥","Four specialists, at once","Credit, income, assets and property — all reviewing in parallel",true);
+      say("Four specialists started at the same time","hi");
     } else if(SPECIALISTS.includes(d.node)){
+      say(`${BY_ID[d.node].name} finished (${d.elapsed.toFixed(1)}s)`);
       const left=SPECIALISTS.filter(n=>document.querySelector(`.mate[data-node="${n}"]`).dataset.state!=="done");
       if(left.length){
         setNow("👥",`${left.length} specialist${left.length>1?"s":""} still working`,
@@ -455,12 +569,13 @@ function handle(ev,d){
       } else {
         setMate("critic","active");
         setNow("🔍",BY_ID.critic.name,BY_ID.critic.doing,true);
+        say("All four done — handing to the reviewer to check for contradictions","hi");
       }
     } else if(d.node==="critic"){
       setMate("decision","active");
       setNow("⚖️",BY_ID.decision.name,BY_ID.decision.doing,true);
+      say("Review complete — the underwriter is making the call","hi");
     }
-
     (d.reasoning||[]).forEach(r=>{
       $("#trail").appendChild(el("div",null,`${String(d.elapsed).padStart(5)}s  ${r}`));
     });
@@ -469,11 +584,15 @@ function handle(ev,d){
     done=AGENTS.length;
     $("#now").classList.add("done");
     setNow("✅","Done",`Decision: ${(d.decision||"").replace(/_/g," ")}`,false);
+    const cls=d.decision==="APPROVED"?"ok":d.decision==="DENIED"?"warn":"";
+    say(`Decision: ${(d.decision||"").replace(/_/g," ")} — risk score ${d.risk_score}/100`,cls);
+    if(d.human_review_required) say("Escalated to a human underwriter","warn");
+    say(`Finished in ${d.elapsed}s`);
     renderVerdict(d);
     if(d.metrics) renderNums(d.metrics);
   }
   else if(ev==="error"){
-    showErr(d.message);
+    showErr(d.message); say("Error: "+d.message,"warn");
     AGENTS.forEach(a=>{const n=document.querySelector(`.mate[data-node="${a.id}"]`);
       if(n&&n.dataset.state==="active") setMate(a.id,"error");});
   }
